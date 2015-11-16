@@ -1,0 +1,22 @@
+package main
+
+import (
+		"webmon/alarm"
+	   )
+
+func alarm(id int, content string) {
+	db, err := sql.Open("mysql", db_user)
+	if err != nil {
+		log.Print("alarm(): ", err)
+		return
+	}
+	var username, email, tel, weixin string
+	var if_sendemail, if_sendmsms, if_sendweixin bool
+	err = db.QueryRow("SELECT username, email, if_sendemail, tel, if_sendsms, weixin, if_sendweixin FROM admin where id=?", 
+					id).Scan(&username, &email, &if_sendemail, &tel, &if_sendsms, &weixin, &if_sendweixin)
+	if err != nil {
+		log.Print("error in alarm(): ", err)
+		return
+	}
+	if if_sendemail {
+		
